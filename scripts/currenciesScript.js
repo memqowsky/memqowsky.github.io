@@ -1,10 +1,12 @@
+const convertButton = document.getElementById('convert_button');  
+const fromCurrencySelect = document.getElementById('from-currency');
+const toCurrencySelect = document.getElementById('to-currency');
+const amountSelect = document.getElementById('amount');
 window.addEventListener('DOMContentLoaded', () => {
     populateCurrencyDropdowns();
-    const convertButton = document.getElementById('convert_button');  
-    const fromCurrencySelect = document.getElementById('from-currency');
-    const toCurrencySelect = document.getElementById('to-currency');
     convertButton.addEventListener('click', () => {
         console.log("Convert button");
+        console.log("Amount: ", amountSelect.value);
         convert(fromCurrencySelect.value, toCurrencySelect.value);
     });
 });
@@ -29,10 +31,10 @@ function populateCurrencyDropdowns() {
 }
 
 function convert(baseCurrency, targetCurrency){
-
     console.log("Login: ", baseCurrency, targetCurrency);
     fetch('https://memqowsky-github-io.onrender.com/getCurriencies', {
-    // fetch('http://localhost:3000/getCurriencies', {
+    const resultDiv = document.getElementById('result');
+    fetch('http://localhost:3000/getCurriencies', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -44,6 +46,8 @@ function convert(baseCurrency, targetCurrency){
       if (data.success) {
         console.log("DATA:");
         console.log(data);
+        const resultText = `${amountSelect.value} ${baseCurrency} = ${(data.rate * amountSelect.value).toFixed(2)} ${targetCurrency}`;
+        resultDiv.innerHTML = resultText;
       } else {
         console.log("Error in fetching data frontend");
       }
