@@ -22,7 +22,7 @@ function login() {
     .then(response => response.json())
     .then(data => {
       if (data.success) {
-        window.location.href = '/index.html';
+        window.location.href = '/currencies.html';
       } else {
         errorDiv.textContent = 'Nieprawidłowy login lub hasło!';
       }

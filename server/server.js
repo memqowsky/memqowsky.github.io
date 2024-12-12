@@ -98,6 +98,46 @@ app.post('/login', async (req, res) => {
     }
 });
 
+
+// ################# CURRENCY/CHARTS #################### //
+
+const API_KEY = 'c6d0614dbd4c60d5c9781c2d';
+const BASE_URL = `https://v6.exchangerate-api.com/v6/${API_KEY}/latest/`;
+
+
+app.post('/getCurriencies', async (req, res) => {
+    console.log("Login invoked");
+    const { baseCurrency, targetCurrency } = req.body;
+
+
+    try {
+        const response = await fetch(`${BASE_URL}${baseCurrency}`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        const rates = data.conversion_rates;
+        const rate = rates[targetCurrency];
+
+        if (rate) {
+            console.log(`1 ${baseCurrency} = ${rate} ${targetCurrency}`);
+            res.json({ success: true, rate: rate})
+        } else {
+            console.error(`Nie znaleziono kursu wymiany dla pary walut: ${baseCurrency} -> ${targetCurrency}`);
+        }
+    } catch (error) {
+        console.error('Błąd podczas pobierania danych z API:', error.message);
+    }
+
+
+    try{
+        res.json({ succes: true, });
+    } catch(error) {
+
+    }
+});
+
 app.listen(3000, () => {
     console.log('Server running on http://localhost:3000');
 });
