@@ -46,7 +46,7 @@ function convert(baseCurrency, targetCurrency){
       if (data.success) {
         console.log("DATA:");
         console.log(data);
-        const resultText = `${amountSelect.value} ${baseCurrency} = ${(data.rate * amountSelect.value).toFixed()} ${targetCurrency}`;
+        const resultText = `${amountSelect.value} ${baseCurrency} = ${(data.rate * amountSelect.value).toFixed(2)} ${targetCurrency}`;
         resultDiv.innerHTML = resultText;
       } else {
         console.log("Error in fetching data frontend");
