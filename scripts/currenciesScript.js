@@ -32,9 +32,9 @@ function populateCurrencyDropdowns() {
 
 function convert(baseCurrency, targetCurrency){
     console.log("Login: ", baseCurrency, targetCurrency);
-    fetch('https://memqowsky-github-io.onrender.com/getCurriencies', {
     const resultDiv = document.getElementById('result');
-    fetch('http://localhost:3000/getCurriencies', {
+    fetch('https://memqowsky-github-io.onrender.com/getCurriencies', {
+    // fetch('http://localhost:3000/getCurriencies', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -46,7 +46,7 @@ function convert(baseCurrency, targetCurrency){
       if (data.success) {
         console.log("DATA:");
         console.log(data);
-        const resultText = `${amountSelect.value} ${baseCurrency} = ${(data.rate * amountSelect.value).toFixed(2)} ${targetCurrency}`;
+        const resultText = `${amountSelect.value} ${baseCurrency} = ${(data.rate * amountSelect.value).toFixed()} ${targetCurrency}`;
         resultDiv.innerHTML = resultText;
       } else {
         console.log("Error in fetching data frontend");
