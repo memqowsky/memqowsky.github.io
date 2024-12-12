@@ -58,7 +58,7 @@ app.use(cors()); // Pozwolenie na żądania z innych domen
 // });
 
 app.post('/login', (req, res) => {
-    console.log("Working");
+    console.log("Working and updated");
     // const { username, password } = req.body;
 
     // const stmt = db.prepare('SELECT * FROM users WHERE username = ? AND password = ?');
