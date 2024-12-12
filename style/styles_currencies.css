@@ -52,6 +52,10 @@ button {
     transition: background 0.3s;
 }
 
+#clear_button {
+    background: #f14b2d;
+}
+
 button:hover {
     background: #0056b3;
 }
