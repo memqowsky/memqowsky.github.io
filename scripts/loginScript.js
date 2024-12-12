@@ -11,8 +11,8 @@ function login() {
     const password = document.getElementById('password').value;
     const errorDiv = document.getElementById('error');
     console.log("Login: ", username, password);
-    fetch('https://memqowsky-github-io.onrender.com/login', {
-    // fetch('http://localhost:3000/login', {
+    // fetch('https://memqowsky-github-io.onrender.com/login', {
+    fetch('http://localhost:3000/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

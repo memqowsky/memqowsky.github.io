@@ -19,8 +19,8 @@ function register() {
       return;
     }
 
-    fetch('https://memqowsky-github-io.onrender.com/register', {
-      // fetch('http://localhost:3000/register', {
+    // fetch('https://memqowsky-github-io.onrender.com/register', {
+      fetch('http://localhost:3000/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

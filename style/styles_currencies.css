@@ -83,4 +83,6 @@ button:hover {
 canvas {
     display: block;
     margin: 0 auto;
+    height: 100%;
+    width: 100%; /* lub width: 800px; w zależności od preferencji */
 }

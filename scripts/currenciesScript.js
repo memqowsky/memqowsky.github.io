@@ -1,22 +1,26 @@
-const convertButton = document.getElementById('convert_button');  
-const clearButton = document.getElementById('clear_button');  
+const convertButton = document.getElementById('convert_button');
+const clearButton = document.getElementById('clear_button');
 const fromCurrencySelect = document.getElementById('from-currency');
 const toCurrencySelect = document.getElementById('to-currency');
 const amountSelect = document.getElementById('amount');
-window.addEventListener('DOMContentLoaded', () => {
+
+let chartInstance = null;
+
+window.addEventListener('DOMContentLoaded', async () => {
+    await prepareForFetchHistoricalRates();
     populateCurrencyDropdowns();
-    
+
     // Przywrócenie historii konwersji z localStorage
     const history = JSON.parse(localStorage.getItem('conversionHistory')) || [];
     localStorage.clear()
     history.reverse().forEach(item => {
         addConversionToHistory(item.baseCurrency, item.targetCurrency, item.amount, item.result);
     });
-    
+
     convertButton.addEventListener('click', () => {
         console.log("Convert button");
         console.log("Amount: ", amountSelect.value);
-        if(amountSelect.value != ""){
+        if (amountSelect.value != "") {
             convert(fromCurrencySelect.value, toCurrencySelect.value);
         }
     });
@@ -24,40 +28,47 @@ window.addEventListener('DOMContentLoaded', () => {
     clearButton.addEventListener('click', () => {
         console.log("Clear button");
         localStorage.clear();
-        location.href="currencies.html";
+        location.href = "currencies.html";
+    });
+
+    toCurrencySelect.addEventListener('change', (event) => {
+        console.log('Selected To Currency:', event.target.value);
+        fetchHistoricalRates();
     });
 });
 
 function populateCurrencyDropdowns() {
-    const popularCurrencies = ['USD', 'EUR', 'JPY', 'GBP', 'AUD', 'CAD', 'CHF', 'CNY', 'SEK', 'PLN'];
-    const fromCurrencySelect = document.getElementById('from-currency');
-    const toCurrencySelect = document.getElementById('to-currency');
+    let popularCurrencies = ['EUR', 'JPY', 'GBP', 'AUD', 'CAD', 'CHF', 'CNY', 'SEK', 'PLN'];
+    let fromCurrencySelect = document.getElementById('from-currency');
+    let toCurrencySelect = document.getElementById('to-currency');
+
+    const optionFrom = document.createElement('option');
+    optionFrom.value = "USD";
+    optionFrom.textContent = "USD";
+    fromCurrencySelect.appendChild(optionFrom);
 
     // Wypełnianie list rozwijanych
     popularCurrencies.forEach(currency => {
-        const optionFrom = document.createElement('option');
-        optionFrom.value = currency;
-        optionFrom.textContent = currency;
-        fromCurrencySelect.appendChild(optionFrom);
-
         const optionTo = document.createElement('option');
         optionTo.value = currency;
         optionTo.textContent = currency;
         toCurrencySelect.appendChild(optionTo);
     });
+    let randomIndex = Math.floor(Math.random() * popularCurrencies.length);
+    toCurrencySelect.value = popularCurrencies[randomIndex];
 }
 
 function addConversionToHistory(baseCurrency, targetCurrency, amount, result) {
     const historyList = document.getElementById('history');
     const listItem = document.createElement('li');
     listItem.textContent = `${amount} ${baseCurrency} = ${result} ${targetCurrency}`;
-    
+
     // Sprawdź, czy ten rekord już nie istnieje w historii
     const history = JSON.parse(localStorage.getItem('conversionHistory')) || [];
-    const existingRecord = history.find(item => 
-        item.baseCurrency === baseCurrency && 
-        item.targetCurrency === targetCurrency && 
-        item.amount === amount && 
+    const existingRecord = history.find(item =>
+        item.baseCurrency === baseCurrency &&
+        item.targetCurrency === targetCurrency &&
+        item.amount === amount &&
         item.result === result
     );
 
@@ -74,32 +85,109 @@ function addConversionToHistory(baseCurrency, targetCurrency, amount, result) {
     }
 }
 
-function convert(baseCurrency, targetCurrency){
+function convert(baseCurrency, targetCurrency) {
     console.log("Login: ", baseCurrency, targetCurrency);
     const resultDiv = document.getElementById('result');
-    fetch('https://memqowsky-github-io.onrender.com/login', {
-    // fetch('http://localhost:3000/getCurriencies', {
+    // fetch('https://memqowsky-github-io.onrender.com/login', {
+    fetch('http://localhost:3000/getCurriencies', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({ baseCurrency, targetCurrency })
     })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            console.log("DATA:");
-            console.log(data);
-            const resultText = `${amountSelect.value} ${baseCurrency} = ${(data.rate * amountSelect.value).toFixed(2)} ${targetCurrency}`;
-            resultDiv.innerHTML = resultText;
-            addConversionToHistory(baseCurrency, targetCurrency, amountSelect.value, (data.rate * amountSelect.value).toFixed(2));
-            amountSelect.value = ""; // Ustawia pole na pusty ciąg po konwersji
-        } else {
-            console.log("Error in fetching data frontend");
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                console.log("DATA:");
+                console.log(data);
+                const resultText = `${amountSelect.value} ${baseCurrency} = ${(data.rate * amountSelect.value).toFixed(2)} ${targetCurrency}`;
+                resultDiv.innerHTML = resultText;
+                addConversionToHistory(baseCurrency, targetCurrency, amountSelect.value, (data.rate * amountSelect.value).toFixed(2));
+                amountSelect.value = ""; // Ustawia pole na pusty ciąg po konwersji
+            } else {
+                console.log("Error in fetching data frontend");
+            }
+        })
+        .catch(() => {
+            console.log("Error in fetching data frontend catched");
+        });
+}
+
+async function drawChart(fromCurrency, toCurrency, currencyData) {
+
+    if (chartInstance) {
+        chartInstance.destroy();
+    }
+
+    console.log("Important logs");
+    const labelsToChart = Object.keys(currencyData.rates);
+    const dataToChart = Object.values(currencyData.rates);
+
+    console.log(labelsToChart);
+    console.log(dataToChart);
+
+    const ctx = document.getElementById('chart').getContext('2d');
+    chartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labelsToChart,
+            datasets: [{
+                label: `Exchange Rate (${fromCurrency} to ${toCurrency})`,
+                data: dataToChart,
+                borderColor: 'rgba(75, 192, 192, 1)',
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            }]
+        },
+        options: {
+            scales: {
+                x: {
+                    type: 'category', // categories instead of dates for a simple line chart
+                    title: {
+                        display: true,
+                        text: 'Dates'
+                    }
+                },
+                y: {
+                    beginAtZero: false,
+                    title: {
+                        display: true,
+                        text: 'Exchange Rate'
+                    }
+                }
+            }
         }
-    })
-    .catch(() => {
-        console.log("Error in fetching data frontend catched");
     });
+}
+
+async function prepareForFetchHistoricalRates(){
+    setTimeout(() => {
+        fetchHistoricalRates();
+      }, "1000");
+}
+
+async function fetchHistoricalRates() {
+    const baseCurrency = document.getElementById('from-currency').value;
+    const targetCurrency = document.getElementById('to-currency').value;
+    const days = 7;
+
+    try {
+        const response = await fetch('http://localhost:3000/getHistoricalRates', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ baseCurrency, targetCurrency, days })
+        });
+        const data = await response.json();
+        if (data.success) {
+            console.log(data);
+            drawChart(baseCurrency, targetCurrency, data);
+        } else {
+            console.log('Failed to fetch historical data');
+        }
+    } catch (error) {
+        console.error('Error fetching historical rates:', error);
+    }
 }
 

@@ -104,7 +104,6 @@ app.post('/login', async (req, res) => {
 const API_KEY = 'c6d0614dbd4c60d5c9781c2d';
 const BASE_URL = `https://v6.exchangerate-api.com/v6/${API_KEY}/latest/`;
 
-
 app.post('/getCurriencies', async (req, res) => {
     console.log("Login invoked");
     const { baseCurrency, targetCurrency } = req.body;
@@ -135,6 +134,50 @@ app.post('/getCurriencies', async (req, res) => {
         res.json({ succes: true, });
     } catch(error) {
 
+    }
+});
+
+const API_KEY2 = '7e9f4ba7f74f47daa65901ac32cf6446'; // Twój klucz API do Exchange Rates API
+const BASE_URL2 = 'https://openexchangerates.org/api/historical';
+
+// Endpoint do pobierania danych historycznych
+app.post('/getHistoricalRates', async (req, res) => {
+    const { baseCurrency, targetCurrency } = req.body;
+
+    if (!baseCurrency || !targetCurrency) {
+        return res.status(400).json({ success: false, message: 'Wymagane są waluty bazowa i docelowa!' });
+    }
+
+    const today = new Date();
+    today.setDate(today.getDate() - 1); // Rozpoczynamy od wczoraj
+    const historicalDates = Array.from({ length: 7 }, (_, i) => {
+        const date = new Date(today);
+        date.setDate(today.getDate() - i);
+        return date.toISOString().split('T')[0]; // Format YYYY-MM-DD
+    });
+
+    try {
+        const historicalRates = {};
+
+        for (const date of historicalDates) {
+            const response = await fetch(`${BASE_URL2}/${date}.json?app_id=${API_KEY2}&base=${baseCurrency}&symbols=${targetCurrency}`);
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status} for date: ${date}`);
+            }
+
+            const data = await response.json();
+            if (data.error) {
+                throw new Error(data.error.message);
+            }
+
+            historicalRates[date] = data.rates[targetCurrency];
+        }
+
+        res.json({ success: true, rates: historicalRates });
+    } catch (error) {
+        console.error('Błąd podczas pobierania danych historycznych:', error.message);
+        res.status(500).json({ success: false, message: 'Błąd podczas pobierania danych historycznych!' });
     }
 });
 
