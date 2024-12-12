@@ -4,6 +4,7 @@ const session = require('express-session');
 const path = require('path');
 
 const app = express();
+
 // const db = new Database('users.db');
 
 // // Create users table if it doesn't exist
@@ -16,6 +17,10 @@ const app = express();
 //   `);
 
 app.use(express.json());
+
+const cors = require('cors');
+app.use(cors()); // Pozwolenie na żądania z innych domen
+
 // app.use(express.urlencoded({ extended: true }));
 // app.use(express.static('public'));
 // app.use(session({

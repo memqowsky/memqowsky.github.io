@@ -12,7 +12,7 @@ function login() {
     const errorDiv = document.getElementById('error');
 
     console.log(username, password);
-    fetch('http://localhost:3000/login', {
+    fetch('https://memqowsky-github-io.onrender.com/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
