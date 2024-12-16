@@ -94,7 +94,7 @@ function addConversionToHistory(baseCurrency, targetCurrency, amount, result) {
 function convert(baseCurrency, targetCurrency) {
     console.log("Login: ", baseCurrency, targetCurrency);
     const resultDiv = document.getElementById('result');
-    fetch('https://memqowsky-github-io.onrender.com/login', {
+    fetch('https://memqowsky-github-io.onrender.com/getCurriencies', {
     // fetch('http://localhost:3000/getCurriencies', {
         method: 'POST',
         headers: {
