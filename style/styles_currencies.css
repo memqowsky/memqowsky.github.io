@@ -56,6 +56,10 @@ button {
     background: #f14b2d;
 }
 
+#logout{
+    background: #2e095e;
+}
+
 button:hover {
     background: #0056b3;
 }
@@ -86,3 +90,4 @@ canvas {
     height: 100%;
     width: 100%; /* lub width: 800px; w zależności od preferencji */
 }
+

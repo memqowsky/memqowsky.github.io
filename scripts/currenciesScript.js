@@ -3,6 +3,7 @@ const clearButton = document.getElementById('clear_button');
 const fromCurrencySelect = document.getElementById('from-currency');
 const toCurrencySelect = document.getElementById('to-currency');
 const amountSelect = document.getElementById('amount');
+const logoutButton = document.getElementById('logout');
 
 let chartInstance = null;
 
@@ -34,6 +35,11 @@ window.addEventListener('DOMContentLoaded', async () => {
     toCurrencySelect.addEventListener('change', (event) => {
         console.log('Selected To Currency:', event.target.value);
         fetchHistoricalRates();
+    });
+
+    logoutButton.addEventListener('click', () => {
+        console.log("Clock")
+        location.href="index.html";
     });
 });
 
@@ -88,8 +94,8 @@ function addConversionToHistory(baseCurrency, targetCurrency, amount, result) {
 function convert(baseCurrency, targetCurrency) {
     console.log("Login: ", baseCurrency, targetCurrency);
     const resultDiv = document.getElementById('result');
-    // fetch('https://memqowsky-github-io.onrender.com/login', {
-    fetch('http://localhost:3000/getCurriencies', {
+    fetch('https://memqowsky-github-io.onrender.com/login', {
+    // fetch('http://localhost:3000/getCurriencies', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
