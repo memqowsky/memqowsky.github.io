@@ -178,7 +178,7 @@ async function fetchHistoricalRates() {
     const days = 7;
 
     try {
-        const response = await fetch('http://localhost:3000/getHistoricalRates', {
+        const response = await fetch('https://memqowsky-github-io.onrender.com/getHistoricalRates', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
