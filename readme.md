@@ -1,6 +1,6 @@
-# test-web-app
+# currencies-web-app
 
-Projekt stworzony w ramach zaliczenia przedmiotu **[Nazwa Przedmiotu]** na [Nazwa Uczelni]. Celem projektu było opracowanie aplikacji webowej umożliwiającej zarządzanie kursami walut.
+Celem projektu było opracowanie aplikacji webowej umożliwiającej zarządzanie kursami walut.
 
 ## Spis treści
 
@@ -8,9 +8,6 @@ Projekt stworzony w ramach zaliczenia przedmiotu **[Nazwa Przedmiotu]** na [Nazw
 - [Funkcjonalności](#funkcjonalności)
 - [Technologie](#technologie)
 - [Instalacja i uruchomienie](#instalacja-i-uruchomienie)
-- [Struktura projektu](#struktura-projektu)
-- [Autor](#autor)
-- [Licencja](#licencja)
 
 ## Opis projektu
 

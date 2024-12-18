@@ -138,7 +138,7 @@ app.post('/getCurriencies', async (req, res) => {
 });
 
 
-// const API_KEY2 = '44825c05f78946c19dd6298c961eb88f'; // Twój klucz API do Exchange Rates API
+const API_KEY2 = '44825c05f78946c19dd6298c961eb88f'; // Twój klucz API do Exchange Rates API
 const BASE_URL2 = 'https://openexchangerates.org/api/historical';
 
 // Endpoint do pobierania danych historycznych
