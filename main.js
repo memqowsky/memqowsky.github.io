@@ -1,5 +1,12 @@
-// Course content
+
 const courseContent = [
+    {
+        title: "Wprowadzenie",
+        content: `
+            <h2>Projektowanie interfejsów dla urządzeń mobilnych - zasady Mobile First</h2>
+            <p class="author">Mateusz Korotajew</p>
+        `
+    },
     {
         title: "Czym jest Mobile First?",
         content: `
@@ -8,10 +15,18 @@ const courseContent = [
         `
     },
     {
+        title: "Historia Mobile First",
+        content: `
+            <h2>Historia Mobile First</h2>
+            <p>Podejście Mobile First zaczęło zyskiwać na popularności na początku lat 2010, gdy liczba użytkowników mobilnych przewyższyła liczbę użytkowników komputerów stacjonarnych. Ethan Marcotte wprowadził pojęcie Responsive Web Design (RWD), które stało się podstawą projektowania mobilnego.</p>
+            <p>Firmy takie jak Google i Apple zaczęły dostosowywać swoje usługi do urządzeń mobilnych, co przyspieszyło rozwój tego podejścia. Wcześniej projektanci tworzyli strony pod komputery, a następnie dostosowywali je do mniejszych ekranów, co często powodowało problemy z użytecznością.</p>
+        `
+    },
+    {
         title: "Dlaczego Mobile First?",
         content: `
             <h2>Dlaczego Mobile First?</h2>
-            <p>W ostatnich latach liczba użytkowników mobilnych znacznie wzrosła. Urządzenia mobilne są najczęściej używane do przeglądania internetu, zakupów online i korzystania z mediów połecznościowych.</p>
+            <p>W ostatnich latach liczba użytkowników mobilnych znacznie wzrosła. Urządzenia mobilne są najczęściej używane do przeglądania internetu, zakupów online i korzystania z mediów społecznościowych.</p>
             <p>Projektowanie Mobile First poprawia dostępność i użyteczność aplikacji. Wydajność i szybkie ładowanie są kluczowe na urządzeniach mobilnych, gdzie zasoby są często ograniczone.</p>
         `
     },
@@ -19,7 +34,6 @@ const courseContent = [
         title: "Podstawowe zasady Mobile First",
         content: `
             <h2>Podstawowe zasady Mobile First</h2>
-            <p>Podejście mobile first posiada swoje zasady, które projektant powinien przestrzegać. Są to:</p>
             <ul>
                 <li><strong>Prostota</strong> - Interfejsy powinny być minimalistyczne i czytelne.</li>
                 <li><strong>Wydajność</strong> - Aplikacje powinny szybko się ładować i nie obciążać urządzeń.</li>
@@ -46,15 +60,39 @@ const courseContent = [
         content: `
             <h2>Techniki optymalizacji wydajności</h2>
             <p>Optymalizacja wydajności w kontekście Mobile First jest kluczowa, ponieważ urządzenia mobilne często mają ograniczone zasoby. Jednym z popularnych podejść jest zastosowanie techniki Lazy Loading, polegającej na ładowaniu obrazów i innych zasobów dopiero wtedy, gdy są one widoczne na ekranie.</p>
-            <p>Ważnym elementem optymalizacji jest również minifikacja plików CSS i JS, co pozwala zmniejszyć ich rozmiar i przyspieszyć ładowanie. Dodatkowo, wykorzystanie pamięci podręcznej (cache) i sieci CDN sprawia, że treści są szybciej dostarczane do użytkowników, co przekłada się na lepsze doświadczenia podczas korzystania z aplikacji.</p>
+            <p>Ważnym elementem optymalizacji jest również minifikacja plików CSS i JS, co pozwala zmniejszyć ich rozmiar i przyspieszyć ładowanie. Dodatkowo, wykorzystanie pamięci podręcznej (cache) i sieci CDN sprawia, że treści są szybciej dostarczane do użytkowników.</p>
         `
     },
     {
         title: "Typografia i tekst",
         content: `
             <h2>Typografia i tekst</h2>
-            <p>Czytelność tekstu na urządzeniach mobilnych to jeden z kluczowych aspektów projektowania Mobile First. Należy stosować duże, proste czcionki, które są dobrze widoczne nawet na małych ekranach. Istotne jest również zachowanie odpowiedniego kontrastu między tekstem a tłem, aby zapewnić komfort czytania w różnych warunkach oświetleniowych.</p>
-            <p>Minimalizm w typografii oznacza unikanie zbędnych ozdobników i skomplikowanych fontów, które mogą obciążać urządzenie. Tekst powinien automatycznie skalować się w zależności od rozdzielczości ekranu, co gwarantuje optymalną czytelność na każdym urządzeniu.</p>
+            <p>Czytelność tekstu na urządzeniach mobilnych to jeden z kluczowych aspektów projektowania Mobile First. Należy stosować duże, proste czcionki, które są dobrze widoczne nawet na małych ekranach. Istotne jest również zachowanie odpowiedniego kontrastu między tekstem a tłem.</p>
+            <p>Minimalizm w typografii oznacza unikanie zbędnych ozdobników i skomplikowanych fontów, które mogą obciążać urządzenie. Tekst powinien automatycznie skalować się w zależności od rozdzielczości ekranu.</p>
+        `
+    },
+    {
+        title: "Google i Mobile First Indexing",
+        content: `
+            <h2>Google i Mobile First Indexing</h2>
+            <p>Google wprowadziło Mobile First Indexing, co oznacza, że wyszukiwarka ocenia strony przede wszystkim na podstawie ich wersji mobilnej. Oznacza to, że jeśli strona nie jest dobrze zoptymalizowana pod kątem urządzeń mobilnych, może tracić pozycję w wynikach wyszukiwania.</p>
+            <p>Google zaleca stosowanie responsywnych stron, które automatycznie dostosowują się do ekranów różnych urządzeń. Strony o słabej wydajności mobilnej mogą mieć niższy wskaźnik konwersji i gorszą widoczność w sieci.</p>
+        `
+    },
+    {
+        title: "UX Writing w Mobile First",
+        content: `
+            <h2>UX Writing w Mobile First</h2>
+            <p>W Mobile First UX Writing oznacza projektowanie tekstów, które są krótkie, klarowne i intuicyjne. Ze względu na ograniczoną przestrzeń na ekranach mobilnych, komunikaty powinny być zwięzłe i jednoznaczne.</p>
+            <p>Wskazane jest unikanie długich akapitów i skomplikowanych wyrażeń, aby użytkownicy mogli szybko przyswoić informacje. Warto stosować call-to-action (CTA), które jasno wskazują użytkownikom, co mają zrobić.</p>
+        `
+    },
+    {
+        title: "Dark Mode i jego rola",
+        content: `
+            <h2>Dark Mode i jego rola w Mobile First</h2>
+            <p>Tryb ciemny stał się jednym z popularnych trendów w projektowaniu interfejsów mobilnych. Nie tylko wygląda estetycznie, ale także zmniejsza zmęczenie oczu użytkowników, zwłaszcza w nocy.</p>
+            <p>W przypadku ekranów OLED i AMOLED Dark Mode może również zmniejszyć zużycie energii, wydłużając czas pracy baterii. W Mobile First warto zapewnić użytkownikom możliwość wyboru między trybem jasnym a ciemnym.</p>
         `
     },
     {
@@ -69,16 +107,8 @@ const courseContent = [
         title: "Przykłady interfejsów Mobile First",
         content: `
             <h2>Przykłady interfejsów Mobile First</h2>
-            <p>Współczesne aplikacje mobilne często bazują na zasadach Mobile First. Przykładem tutaj mogą być sklepy internetowe, gdzie użytkownik mobilny oczekuje prostego procesu zakupu oraz przejrzystej nawigacji. Stosowanie Mobile First w takich przypadkach sprawia, że użytkownicy chętniej korzystają z aplikacji, co przekłada się na lepsze wyniki biznesowe.</p>
+            <p>Współczesne aplikacje mobilne często bazują na zasadach Mobile First. Przykładem tutaj mogą być sklepy internetowe, gdzie użytkownik mobilny oczekuje prostego procesu zakupu oraz przejrzystej nawigacji.</p>
             <p>Przykładem również mogą być aplikacje bankowe, w których prostota i szybkość dostępu do najważniejszych funkcji są priorytetowe. Również platformy społecznościowe, takie jak Instagram czy Twitter, stawiają na szybki dostęp do treści i intuicyjne interakcje.</p>
-        `
-    },
-    {
-        title: "Narzędzia wspierające Mobile First",
-        content: `
-            <h2>Narzędzia wspierające Mobile First</h2>
-            <p>W procesie projektowania interfejsów Mobile First warto korzystać z dedykowanych narzędzi i technologii. Jednym z najpopularniejszych frameworków jest Bootstrap, który pozwala na tworzenie responsywnych stron internetowych. Inne narzędzia to Foundation oraz Tailwind CSS, oferujące elastyczność w dostosowywaniu układu.</p>
-            <p>Do prototypowania i tworzenia interfejsów można wykorzystać narzędzia takie jak Figma, Sketch czy Adobe XD. Dzięki nim możliwe jest tworzenie interaktywnych makiet oraz testowanie interfejsu przed wdrożeniem.</p>
         `
     },
     {
@@ -86,7 +116,7 @@ const courseContent = [
         content: `
             <h2>Case Study: Instagram</h2>
             <p>Instagram jest doskonałym przykładem wdrożenia zasady Mobile First. Aplikacja została zaprojektowana z myślą o użytkownikach mobilnych, co sprawiło, że jej interfejs jest intuicyjny i wygodny nawet na najmniejszych ekranach.</p>
-            <p>Kluczowe cechy mobilnego interfejsu Instagrama to prostota nawigacji, szybkość ładowania treści oraz optymalizacja multimediów. Dzięki podejściu Mobile First Instagram stał się jedną z najpopularniejszych aplikacji na świecie, oferując płynne i angażujące doświadczenie użytkownikom na całym świecie.</p>
+            <p>Kluczowe cechy mobilnego interfejsu Instagrama to prostota nawigacji, szybkość ładowania treści oraz optymalizacja multimediów. Dzięki podejściu Mobile First Instagram stał się jedną z najpopularniejszych aplikacji na świecie.</p>
         `
     },
     {
@@ -94,22 +124,61 @@ const courseContent = [
         content: `
             <h2>Przyszłość Mobile First</h2>
             <p>Podejście Mobile First będzie zyskiwać na znaczeniu wraz z rozwojem technologii mobilnych oraz rosnącą liczbą urządzeń mobilnych na rynku. Trendy, takie jak Progressive Web Apps (PWA) oraz rozwój sieci 5G, jeszcze bardziej uwypuklają znaczenie szybkiego i responsywnego projektowania aplikacji.</p>
-            <p>Przewiduje się, że w przyszłości podejście Mobile First zostanie jeszcze bardziej zintegrowane z nowoczesnymi technologiami, takimi jak rzeczywistość rozszerzona (AR) oraz sztuczna inteligencja (AI), które będą wzbogacać interakcje użytkownika z aplikacjami mobilnymi.</p>
+            <p>Przewiduje się integrację z nowoczesnymi technologiami, takimi jak rzeczywistość rozszerzona (AR) oraz sztuczna inteligencja (AI).</p>
+        `
+    },
+    {
+        title: "Mobile First w IoT",
+        content: `
+            <h2>Mobile First w IoT (Internet Rzeczy)</h2>
+            <p>Mobile First odgrywa kluczową rolę w Internet of Things (IoT), gdzie smartfony pełnią funkcję centrów sterowania inteligentnymi urządzeniami. Aplikacje mobilne umożliwiają użytkownikom zarządzanie smart home, np. regulowanie temperatury, sterowanie oświetleniem czy monitorowanie bezpieczeństwa.</p>
+            <p>Interfejsy mobilne dla IoT muszą być przejrzyste, responsywne i łatwe w obsłudze na ekranach dotykowych. Minimalistyczny design i prosta nawigacja są niezbędne, aby użytkownicy mogli szybko i intuicyjnie sterować swoimi urządzeniami.</p>
+        `
+    },
+    {
+        title: "Voice UI i Mobile First",
+        content: `
+            <h2>Voice UI i Mobile First</h2>
+            <p>Coraz więcej użytkowników korzysta z asystentów głosowych, takich jak Alexa, Google Assistant czy Siri, co wpływa na rozwój Voice UI w Mobile First. Interfejsy głosowe pozwalają na bezdotykowe sterowanie aplikacjami mobilnymi, co jest szczególnie przydatne w samochodach czy podczas ćwiczeń.</p>
+            <p>Projektowanie z myślą o Voice UI wymaga uproszczenia interakcji i dostosowania aplikacji do komend głosowych. Wyszukiwanie głosowe staje się coraz popularniejsze, dlatego Mobile First powinien uwzględniać optymalizację treści pod kątem zapytań głosowych.</p>
+        `
+    },
+    {
+        title: "Mobile First w aplikacjach fitness i zdrowotnych",
+        content: `
+            <h2>Aplikacje fitness i zdrowotne są jednymi z największych beneficjentów podejścia Mobile First.</h2>
+            <p>Użytkownicy mobilni oczekują intuicyjnych interfejsów, które pozwalają na szybkie monitorowanie aktywności fizycznej czy parametrów zdrowotnych. Dzięki integracji z sensorami urządzeń mobilnych, takimi jak krokomierze czy pulsometry, aplikacje dostarczają użytkownikom dokładnych danych w czasie rzeczywistym. Personalizacja planów treningowych oraz możliwość śledzenia postępów zwiększa zaangażowanie użytkowników. Mobile First w aplikacjach zdrowotnych umożliwia również łatwy dostęp do konsultacji online i planowania wizyt u lekarzy.
+            </p>
+        `
+    },
+    {
+        title: "Dostępność w Mobile First",
+        content: `
+            <h2>Dostępność (Accessibility) w Mobile First</h2>
+            <p>Projektowanie z myślą o Accessibility (A11y) oznacza tworzenie interfejsów dostępnych dla osób z niepełnosprawnościami. Mobile First wymaga większego kontrastu tekstów, większych przycisków oraz kompatybilności z czytnikami ekranu.</p>
+            <p>Warto zadbać o odpowiednie ARIA labels, które pomagają osobom niewidomym w nawigacji po stronie. Dostosowanie aplikacji do sterowania głosowego oraz obsługi za pomocą jednej ręki poprawia komfort korzystania.</p>
+        `
+    },
+    {
+        title: "Jak mierzyć sukces Mobile First",
+        content: `
+            <h2>Jak mierzyć sukces Mobile First?</h2>
+            <p>Skuteczność strategii Mobile First można ocenić na podstawie kluczowych wskaźników wydajności (KPI). Jednym z najważniejszych jest współczynnik konwersji, który mierzy, ilu użytkowników mobilnych wykonuje pożądane działania (np. zakup, rejestracja).</p>
+            <p>Czas ładowania strony na urządzeniach mobilnych również wpływa na sukces – optymalny czas to poniżej 3 sekund. Wskaźnik odrzuceń (bounce rate) pokazuje, ile osób opuszcza stronę zaraz po wejściu, co może sugerować problemy z użytecznością.</p>
         `
     },
     {
         title: "Podsumowanie",
         content: `
             <h2>Podsumowanie</h2>
-            <p>Projektowanie interfejsów Mobile First to nie tylko trendy, ale także konieczność w obecnych czasach. Coraz większa liczba użytkowników mobilnych wymaga, aby aplikacje były dostosowane do małych ekranów i oferowały szybki dostęp do klucazowych funkcji.</p>
-            <p>Wykorzystując odpowiednie narzędzia oraz przestrzegając zasad Mobile First, projektanci mogą tworzyć intuicyjne i efektywne interfejsy, które spełniają oczekiwania użytkowników.</p><br><br>
-            <strong>Ćwczienie: Spróbuj zaprojektować prostą aplikację do przeglądania zdjęć i zastanów się czy prostsze jest projektowanie na komputer czy na komórkę i dlaczego?</strong>
+            <p>Projektowanie interfejsów Mobile First to nie tylko trend, ale konieczność w obecnych czasach. Coraz większa liczba użytkowników mobilnych wymaga, aby aplikacje były dostosowane do małych ekranów i oferowały szybki dostęp do kluczowych funkcji.</p>
+            <p>Wykorzystując odpowiednie narzędzia oraz przestrzegając zasad Mobile First, projektanci mogą tworzyć intuicyjne i efektywne interfejsy, które spełniają oczekiwania użytkowników.</p>
             <button onclick="startTest()" class="start-test-btn">Rozpocznij test</button>
         `
     }
 ];
 
-// Test questions
+
 const testQuestions = [
     {
         question: "Co oznacza podejście Mobile First?",
@@ -310,7 +379,58 @@ const testQuestions = [
             "Użycie wyłącznie statycznych obrazów"
         ],
         correctAnswer: 1
+    },
+    {
+        question: "Jaką rolę pełnią smartfony w ekosystemie IoT?",
+        answers: [
+            "Służą tylko do przeglądania internetu",
+            "Pełnią funkcję centrów sterowania inteligentnymi urządzeniami",
+            "Nie mają znaczenia w IoT",
+            "Służą wyłącznie do komunikacji"
+        ],
+        correctAnswer: 1
+    },
+    {
+        question: "Co jest kluczowe w projektowaniu interfejsów dla Voice UI?",
+        answers: [
+            "Skomplikowane komendy głosowe",
+            "Uproszczenie interakcji i dostosowanie do komend głosowych",
+            "Rezygnacja z interfejsu graficznego",
+            "Zwiększenie liczby opcji menu"
+        ],
+        correctAnswer: 1
+    },
+    {
+        question: "Co oznacza skrót A11y w kontekście Mobile First?",
+        answers: [
+            "Algorithm",
+            "Accessibility (Dostępność)",
+            "Application",
+            "Analytics"
+        ],
+        correctAnswer: 1
+    },
+    {
+        question: "Jaki jest optymalny czas ładowania strony mobilnej?",
+        answers: [
+            "Poniżej 10 sekund",
+            "Poniżej 3 sekund",
+            "Poniżej 1 minuty",
+            "Nie ma znaczenia"
+        ],
+        correctAnswer: 1
+    },
+    {
+        question: "Co to jest bounce rate w kontekście Mobile First?",
+        answers: [
+            "Szybkość animacji",
+            "Wskaźnik odrzuceń pokazujący ile osób opuszcza stronę",
+            "Liczba wyświetleń strony",
+            "Czas spędzony na stronie"
+        ],
+        correctAnswer: 1
     }
+    
 ];
 
 let currentSlide = 0;
@@ -326,17 +446,17 @@ function displaySlide(index) {
     const slideCounter = document.getElementById('slideCounter');
     const progress = document.getElementById('progress');
 
-    // Update slide content
+    
     slideContent.innerHTML = `<div class="slide active">${courseContent[index].content}</div>`;
 
-    // Update navigation buttons
+    
     prevBtn.disabled = index === 0;
     nextBtn.disabled = index === courseContent.length - 1;
 
-    // Update slide counter
+    
     slideCounter.textContent = `${index + 1} / ${courseContent.length}`;
 
-    // Update progress bar
+    
     const progressPercentage = ((index + 1) / courseContent.length) * 100;
     progress.style.width = `${progressPercentage}%`;
 }
@@ -366,18 +486,18 @@ function displayQuestion(index) {
             </form>
         </div>`;
 
-    // Update navigation buttons
+    
     prevBtn.disabled = index === 0;
     nextBtn.disabled = index === testQuestions.length - 1;
 
-    // Update question counter
+    
     slideCounter.textContent = `Pytanie ${index + 1} / ${testQuestions.length}`;
 
-    // Update progress bar
+    
     const progressPercentage = ((index + 1) / testQuestions.length) * 100;
     progress.style.width = `${progressPercentage}%`;
 
-    // Add click handlers for answer options
+    
     document.querySelectorAll('.answer-option').forEach((option, i) => {
         option.addEventListener('click', () => {
             document.querySelectorAll('.answer-option').forEach(opt => opt.classList.remove('selected'));
@@ -415,7 +535,7 @@ function showTestResults() {
             <button onclick="returnToCourse()" class="return-to-course">Powrót do kursu</button>
         </div>`;
 
-    // Hide navigation buttons during results
+    
     document.querySelector('.navigation-buttons').style.display = 'none';
     testCompleted = true;
 }
@@ -461,5 +581,5 @@ function previousSlide() {
     }
 }
 
-// Initialize first slide
+
 displaySlide(0);

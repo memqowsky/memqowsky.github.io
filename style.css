@@ -35,6 +35,13 @@ h1 {
     letter-spacing: 1px;
 }
 
+.author {
+    text-align: center;
+    font-size: 1.2em;
+    color: #666;
+    margin-bottom: 20px;
+}
+
 .content-section {
     background-color: #ffffff;
     padding: 40px;
