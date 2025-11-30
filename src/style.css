@@ -1,0 +1,47 @@
+body {
+  font-family: sans-serif;
+  padding: 2rem;
+}
+
+input, textarea {
+  width: 100%;
+  padding: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.task-list {
+  list-style-type: none;
+  padding-left: 1rem;
+  margin-top: 0.5rem;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-in-out;
+}
+
+.task-list.expanded {
+  max-height: 500px; 
+}
+
+.story-title {
+  cursor: pointer;
+}
+
+#task-container section {
+  flex: 0 0 350px;
+  min-width: 350px;
+  background: #fafafa;
+  border-radius: 8px;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+#task-container, #add-story, #view-kanban, #logout-button, #manage-projects  {
+  position: relative;
+  left: -120px;
+}
+
+#view-kanban {
+  position: relative;
+  left: -120px;
+}
+

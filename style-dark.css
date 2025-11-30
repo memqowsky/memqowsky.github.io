@@ -1,16 +1,16 @@
-/* ManagMe - Modern CSS Styles
- * A clean, responsive design system for the project management application
+/* ManagMe - Dark Mode CSS Styles
+ * A clean, responsive dark theme for the project management application
  */
 
 /* === Base Styles & Reset === */
 :root {
-    /* Color System */
-    --color-primary: #2563eb;
-    --color-primary-light: #3b82f6;
+    /* Color System - Dark Mode */
+    --color-primary: #3b82f6;
+    --color-primary-light: #60a5fa;
     --color-primary-dark: #1d4ed8;
     
-    --color-secondary: #0d9488;
-    --color-secondary-light: #14b8a6;
+    --color-secondary: #14b8a6;
+    --color-secondary-light: #2dd4bf;
     --color-secondary-dark: #0f766e;
     
     --color-accent: #f97316;
@@ -21,15 +21,21 @@
     --color-warning: #eab308;
     --color-error: #ef4444;
     
-    --color-gray-100: #f3f4f6;
-    --color-gray-200: #e5e7eb;
-    --color-gray-300: #d1d5db;
-    --color-gray-400: #9ca3af;
-    --color-gray-500: #6b7280;
-    --color-gray-600: #4b5563;
-    --color-gray-700: #374151;
-    --color-gray-800: #1f2937;
-    --color-gray-900: #111827;
+    --color-gray-100: #1f2937;
+    --color-gray-200: #374151;
+    --color-gray-300: #4b5563;
+    --color-gray-400: #6b7280;
+    --color-gray-500: #9ca3af;
+    --color-gray-600: #d1d5db;
+    --color-gray-700: #e5e7eb;
+    --color-gray-800: #f3f4f6;
+    --color-gray-900: #f9fafb;
+    
+    /* Dark Mode Background Colors */
+    --bg-main: #0f172a;
+    --bg-surface: #1e293b;
+    --bg-surface-raised: #334155;
+    --bg-surface-sunken: #0f172a;
     
     /* Typography */
     --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', sans-serif;
@@ -50,10 +56,10 @@
     --radius-md: 0.375rem;
     --radius-lg: 0.5rem;
     
-    /* Shadows */
-    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    /* Shadows - Adjusted for Dark Mode */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
     
     /* Transitions */
     --transition-fast: 150ms ease;
@@ -71,8 +77,8 @@
     font-family: var(--font-family);
     font-size: 16px;
     line-height: 1.5;
-    color: var(--color-gray-800);
-    background-color: var(--color-gray-100);
+    color: var(--color-gray-600);
+    background-color: var(--bg-main);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -88,7 +94,7 @@
     font-weight: 600;
     line-height: 1.2;
     margin-bottom: var(--space-4);
-    color: var(--color-gray-900);
+    color: var(--color-gray-800);
   }
   
   h1 {
@@ -116,7 +122,7 @@
   
   strong {
     font-weight: 600;
-    color: var(--color-gray-900);
+    color: var(--color-gray-800);
   }
   
   /* === Forms & Inputs === */
@@ -126,7 +132,7 @@
     gap: var(--space-4);
     max-width: 400px;
     margin: 0 auto;
-    background-color: white;
+    background-color: var(--bg-surface);
     padding: var(--space-6);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-md);
@@ -140,6 +146,8 @@
     border: 1px solid var(--color-gray-300);
     border-radius: var(--radius-md);
     font-size: 1rem;
+    background-color: var(--bg-surface-sunken);
+    color: var(--color-gray-700);
     transition: border-color var(--transition-fast);
   }
   
@@ -148,7 +156,7 @@
   input[type="number"]:focus {
     outline: none;
     border-color: var(--color-primary);
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
   }
   
   /* === Buttons === */
@@ -163,17 +171,17 @@
     font-size: 0.875rem;
     cursor: pointer;
     transition: all var(--transition-fast);
-    background-color: var(--color-gray-200);
-    color: var(--color-gray-700);
+    background-color: var(--color-gray-300);
+    color: var(--color-gray-800);
   }
   
   button:hover {
-    background-color: var(--color-gray-300);
+    background-color: var(--color-gray-200);
   }
   
   button:focus {
     outline: none;
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
   }
   
   form button[type="submit"],
@@ -192,12 +200,12 @@
   }
   
   #logout-button {
-    background-color: var(--color-gray-200);
+    background-color: var(--color-gray-300);
     margin-top: var(--space-6);
   }
   
   #logout-button:hover {
-    background-color: var(--color-gray-300);
+    background-color: var(--color-gray-200);
   }
   
   /* === Project Select === */
@@ -228,7 +236,7 @@
   }
   
   section {
-    background-color: white;
+    background-color: var(--bg-surface);
     border-radius: var(--radius-lg);
     padding: var(--space-4);
     box-shadow: var(--shadow-sm);
@@ -249,7 +257,7 @@
   
   /* === Story & Task Items === */
   .story-item {
-    background-color: white;
+    background-color: var(--bg-surface-raised);
     border-radius: var(--radius-md);
     padding: var(--space-4);
     margin-bottom: var(--space-4);
@@ -258,7 +266,7 @@
   }
   
   .task-item {
-    background-color: var(--color-gray-100);
+    background-color: var(--bg-surface-sunken);
     border-radius: var(--radius-md);
     padding: var(--space-3);
     margin-top: var(--space-3);
@@ -274,7 +282,7 @@
   .story-item p {
     margin-bottom: var(--space-3);
     font-size: 0.875rem;
-    color: var(--color-gray-600);
+    color: var(--color-gray-500);
   }
   
   .story-item button,
@@ -289,7 +297,7 @@
     font-size: 0.75rem;
     padding: var(--space-1) var(--space-2);
     border-radius: var(--radius-sm);
-    background-color: var(--color-gray-200);
+    background-color: var(--color-gray-300);
   }
   
   .story-item[data-priority="High"] h3:after,
@@ -301,7 +309,7 @@
   .story-item[data-priority="Medium"] h3:after,
   .task-item[data-priority="Medium"] strong:after {
     background-color: var(--color-warning);
-    color: var(--color-gray-800);
+    color: var(--color-gray-900);
   }
   
   .story-item[data-priority="Low"] h3:after,
@@ -338,7 +346,7 @@
   }
   
   div[style*="display: flex; gap: 10px;"] > div {
-    background-color: white;
+    background-color: var(--bg-surface);
     border-radius: var(--radius-lg);
     padding: var(--space-4);
     box-shadow: var(--shadow-sm);
@@ -358,7 +366,7 @@
   
   /* === Task Details View === */
   #app h1 + p {
-    background-color: white;
+    background-color: var(--bg-surface);
     border-radius: var(--radius-lg);
     padding: var(--space-4);
     box-shadow: var(--shadow-md);
@@ -396,7 +404,7 @@
     left: 50%;
     width: 5px;
     height: 5px;
-    background: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.2);
     opacity: 0;
     border-radius: 100%;
     transform: scale(1, 1) translate(-50%);
@@ -470,7 +478,7 @@
   }
   
   .btn-delete:hover {
-    background-color: #dc2626; /* Darker red */
+    background-color: #b91c1c; /* Darker red for dark mode */
   }
   
   .btn-add {
@@ -479,7 +487,7 @@
   }
   
   .btn-add:hover {
-    background-color: #15803d; /* Darker green */
+    background-color: #166534; /* Darker green for dark mode */
   }
   
   /* Task status indicators */
@@ -493,7 +501,7 @@
   
   .status-todo {
     background-color: var(--color-warning);
-    color: var(--color-gray-800);
+    color: var(--color-gray-900);
   }
   
   .status-inprogress {
@@ -505,6 +513,55 @@
     background-color: var(--color-success);
     color: white;
   }
+  
+  /* Dark mode specific enhancements */
+  ::selection {
+    background: var(--color-primary-dark);
+    color: white;
+  }
+  
+  /* Focus state improvements for dark mode */
+  :focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+  
+  /* Scrollbar styling for dark mode */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: var(--bg-surface-sunken);
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-gray-300);
+    border-radius: var(--radius-md);
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-gray-400);
+  }
+  
+  /* Dark mode transitions for system preference changes */
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    
+    #app, section, .story-item, .task-item, form, input, button {
+      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+  }
+  
+  /* Dark mode browser chrome/address bar color */
+  @media (prefers-color-scheme: dark) {
+    html {
+      color-scheme: dark;
+    }
+  }
 
   #Projects {
     display: flex;
@@ -513,29 +570,117 @@
     margin-top: 2rem; /* opcjonalny odstęp od góry */
   }
 
-    /* Dla zwykłych sekcji */
-  section:nth-child(4) {
-    border-top: 4px solid var(--color-secondary);
-  }
+  /* Force dark background for all board sections */
+section,
+div[style*="display: flex; gap: 10px;"] > div {
+  background-color: var(--bg-main) !important; /* czarne tło */
+  color: var(--color-gray-600) !important;
+}
 
-  /* Dla Kanbana */
-  div[style*="display: flex; gap: 10px;"] > div:nth-child(4) {
-    border-top: 4px solid var(--color-secondary);
-  }
+/* === 4. kolumna - Ukończone === */
+section:nth-child(4) {
+  border-top: 4px solid var(--color-secondary) !important;
+}
 
-  .kanban-card {
-  background-color: var(--bg-surface-raised); /* lekko jaśniejsze od kolumny */
-  border: 1px solid #e0e0e0;
-  border-radius: 6px;
-  padding: 8px;
+/* === Zarządzanie Projektami - Dark Mode === */
+
+/* Tabela projektów */
+body.dark-mode #projects-list table {
+  background-color: var(--bg-surface) !important;
+  color: var(--color-gray-700) !important;
+}
+
+/* Nagłówek tabeli */
+body.dark-mode #projects-list thead {
+  background-color: var(--color-primary) !important;
+  color: white !important;
+}
+
+body.dark-mode #projects-list thead th {
+  color: white !important;
+}
+
+/* Wiersze tabeli */
+body.dark-mode #projects-list tbody tr {
+  background-color: var(--bg-surface) !important;
+  border-bottom: 1px solid var(--color-gray-300) !important;
+}
+
+body.dark-mode #projects-list tbody tr:hover {
+  background-color: var(--bg-surface-raised) !important;
+}
+
+/* Komórki tabeli */
+body.dark-mode #projects-list tbody td {
+  color: var(--color-gray-700) !important;
+}
+
+/* Przyciski w tabeli */
+body.dark-mode .edit-project {
+  background-color: #ffc107 !important;
+  color: #000 !important;
+}
+
+body.dark-mode .edit-project:hover {
+  background-color: #ffb300 !important;
+}
+
+body.dark-mode .delete-project {
+  background-color: #dc3545 !important;
+  color: white !important;
+}
+
+body.dark-mode .delete-project:hover {
+  background-color: #c82333 !important;
+}
+
+/* Przyciski górne (Dodaj projekt, Powrót) */
+body.dark-mode #add-project {
+  background-color: #28a745 !important;
+  color: white !important;
+}
+
+body.dark-mode #add-project:hover {
+  background-color: #218838 !important;
+}
+
+/* Tytuł strony zarządzania projektami */
+body.dark-mode h1 {
+  color: var(--color-gray-800) !important;
+}
+
+.kanban-card {
+  background-color: var(--bg-surface-raised) !important;
+  border: 1px solid var(--color-gray-300);
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 10px;
+  color: var(--color-gray-700) !important;
+  transition: background-color 0.3s, color 0.3s, transform 0.2s, box-shadow 0.2s;
+  box-shadow: var(--shadow-sm);
+}
+
+.kanban-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--color-primary);
+}
+
+/* Tytuł zadania - z obramówką */
+.kanban-card > div:first-child {
+  color: var(--color-gray-800) !important;
+  font-weight: 700;
+  padding-bottom: 8px;
   margin-bottom: 8px;
-  background-color: white; /* default */
-  transition: background-color 0.3s, color 0.3s;
+  border-bottom: 1px solid var(--color-gray-300); /* obramówka pod tytułem */
 }
 
-body.dark-mode .kanban-card {
-  background-color: var(--bg-surface-raised); /* lekko jaśniejsze od kolumny */
-  color: var(--bg-main);
-  border-color: white;
+/* Subtitle/Story - z delikatnym tłem */
+.kanban-card > div:nth-child(2) {
+  color: var(--color-gray-500) !important;
+  font-size: 12px;
+  padding: 6px 8px;
+  background-color: var(--bg-surface-sunken);
+  border-radius: 4px;
+  border-left: 3px solid var(--color-primary); /* kolorowy pasek z lewej */
 }
-
