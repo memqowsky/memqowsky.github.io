@@ -1,6 +1,6 @@
 function selectProject(projectName: string) {
     console.log("Selecting: ", projectName);
-    fetch('http://localhost:3000/api/select-project', {
+    fetch('https://memqowsky-github-io-t2ej.onrender.com/api/select-project', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

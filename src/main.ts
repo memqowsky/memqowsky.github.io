@@ -45,7 +45,7 @@ async function showLoginPage() {
 
 async function setProject(projectName: string) {
   try {
-    const response = await fetch('http://localhost:3000/api/select-project', {
+    const response = await fetch('https://memqowsky-github-io-t2ej.onrender.com/api/select-project', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ project: projectName }),
@@ -267,7 +267,7 @@ interface ProjectResponse {
 
 async function getCurrentProject(): Promise<string | null> {
   try {
-    const response = await fetch('http://localhost:3000/api/current-project');
+    const response = await fetch('https://memqowsky-github-io-t2ej.onrender.com/api/current-project');
 
     if (!response.ok) {
       throw new Error(`Błąd HTTP: ${response.status}`);

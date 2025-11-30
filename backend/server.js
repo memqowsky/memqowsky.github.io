@@ -54,7 +54,7 @@ mongoose.connect(process.env.MONGO_URI, {
 });
 
 app.listen(port, () => {
-  console.log(`Serwer działa na http://localhost:${port}`);
+  console.log(`Serwer działa..`);
 });
 
 

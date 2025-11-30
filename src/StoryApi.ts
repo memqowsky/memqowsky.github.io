@@ -28,7 +28,7 @@ export type Story = {
 };
 
 export class StoryApi {
-    private static baseUrl = 'http://localhost:3000/api/stories';
+    private static baseUrl = 'https://memqowsky-github-io-t2ej.onrender.com/api/stories';
 
     private static getAuthHeaders(): HeadersInit {
         const token = localStorage.getItem('accessToken');

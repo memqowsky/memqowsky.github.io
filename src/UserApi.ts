@@ -13,7 +13,7 @@ export class UserApi {
 
   static async loginUser(user: { login: string; password: string }): Promise<User | null> {
     try {
-      const response = await fetch('http://localhost:3000/api/users/login', {
+      const response = await fetch('https://memqowsky-github-io-t2ej.onrender.com/api/users/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(user)
@@ -52,7 +52,7 @@ export class UserApi {
   static async getUserFullNameById(userId: string): Promise<string | null> {
     console.log("Tryingto getUserFullNameById, userId:", userId);
     try {
-      const response = await fetch(`http://localhost:3000/api/users/${userId}`);
+      const response = await fetch(`https://memqowsky-github-io-t2ej.onrender.com/api/users/${userId}`);
       if (!response.ok) {
         console.error('Nie udało się pobrać użytkownika:', await response.text());
         return null;

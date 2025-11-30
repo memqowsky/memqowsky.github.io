@@ -7,7 +7,7 @@ export interface Project {
 }
 
 export class ProjectApi {
-  private static baseUrl = 'http://localhost:3000/api/projects';
+  private static baseUrl = 'https://memqowsky-github-io-t2ej.onrender.com/api/projects';
 
   static async getAll(): Promise<Project[]> {
     const res = await fetch(`${this.baseUrl}`);
