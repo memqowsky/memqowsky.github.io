@@ -11,6 +11,7 @@ router.delete('/:id', storyController.deleteStory);
 
 router.post('/:id/tasks', storyController.addTask);
 router.put('/:id/tasks', storyController.updateTask);
+router.put('/:id/tasks/:taskId', storyController.updateTask);
 router.delete('/:id/tasks/:taskId', storyController.deleteTask);
 router.get('/:id/tasks/:taskId', storyController.getTask);
 

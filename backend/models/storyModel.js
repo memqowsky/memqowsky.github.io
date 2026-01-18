@@ -7,7 +7,7 @@ const taskSchema = new mongoose.Schema({
   priority: { type: String, enum: ['Low', 'Medium', 'High'] },
   estimatedHours: Number,
   hoursWorked: Number,
-  status: { type: String, enum: ['ToDo', 'InProgress', 'Done'] },
+  status: { type: String, enum: ['ToDo', 'InProgress', 'InQA', 'Done'] },
   createdAt: String,
   startAt: String,
   endAt: String,
@@ -21,7 +21,7 @@ const storySchema = new mongoose.Schema({
   priority: { type: String, enum: ['Low', 'Medium', 'High'] },
   project: String,
   createdAt: String,
-  status: { type: String, enum: ['ToDo', 'InProgress', 'Done'] },
+  status: { type: String, enum: ['ToDo', 'InProgress', 'InQA', 'Done'] },
   ownerId: String,
   tasks: [taskSchema]
 });

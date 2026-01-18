@@ -638,7 +638,7 @@ async function assignUser(storyId: string, taskId: string) {
             task.assignedUserId = loggedUser.id;
             task.status = 'InProgress';
             task.startAt = new Date().toISOString();
-            task.endAt = "";
+            task.endAt = undefined;
 
             // 3. Wysyłamy do serwera i CZEKAMY na odpowiedź
             const response = await StoryApi.updateTask(storyId, task);

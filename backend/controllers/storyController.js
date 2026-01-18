@@ -36,15 +36,31 @@ exports.addTask = async (req, res) => {
 };
 
 exports.updateTask = async (req, res) => {
-  const updated = await storyService.updateTask(req.params.id, req.body);
-  if (!updated) return res.status(404).json({ message: 'Story not found' });
-  res.json(updated);
+  try {
+    const updated = await storyService.updateTask(req.params.id, req.body);
+    if (!updated) return res.status(404).json({ message: 'Story not found' });
+    res.json(updated);
+  } catch (error) {
+    console.error('Błąd podczas aktualizacji zadania:', error);
+    if (error.name === 'ValidationError') {
+      return res.status(400).json({ message: 'Błąd walidacji: ' + error.message });
+    }
+    return res.status(500).json({ message: 'Błąd serwera podczas aktualizacji zadania' });
+  }
 };
 
 exports.deleteTask = async (req, res) => {
-  const updated = await storyService.deleteTask(req.params.id, req.params.taskId);
-  if (!updated) return res.status(404).json({ message: 'Story not found or task not found' });
-  res.json(updated);
+  try {
+    const updated = await storyService.deleteTask(req.params.id, req.params.taskId);
+    if (!updated) return res.status(404).json({ message: 'Story not found or task not found' });
+    res.json(updated);
+  } catch (error) {
+    console.error('Błąd podczas usuwania zadania:', error);
+    if (error.name === 'ValidationError') {
+      return res.status(400).json({ message: 'Błąd walidacji: ' + error.message });
+    }
+    return res.status(500).json({ message: 'Błąd serwera podczas usuwania zadania' });
+  }
 };
 
 exports.getTask = async (req, res) => {
