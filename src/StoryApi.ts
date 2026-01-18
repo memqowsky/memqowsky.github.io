@@ -94,10 +94,18 @@ export class StoryApi {
     }
 
     static async updateTask(storyId: string, task: Task): Promise<Story> {
-        const res = await this.fetchWithAuth(`${this.baseUrl}/${storyId}/tasks`, {
+        // Dodajemy /${task.id} na końcu adresu URL
+        const res = await this.fetchWithAuth(`${this.baseUrl}/${storyId}/tasks/${task.id}`, {
             method: 'PUT',
             body: JSON.stringify(task)
         });
+
+        if (!res.ok) {
+            const errorText = await res.text();
+            console.error("Błąd serwera:", errorText);
+            throw new Error(`Serwer zwrócił błąd ${res.status}`);
+        }
+
         return await res.json();
     }
 

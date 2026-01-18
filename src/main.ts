@@ -9,6 +9,79 @@ let loggedInUser: User | null;
 
 type TaskWithStory = Task & { storyTitle: string };
 
+async function showModal(title: string, fields: {id: string, label: string, type: string, options?: string[], value?: string}[]): Promise<Record<string, string> | null> {
+    return new Promise((resolve) => {
+        // Tworzymy główny kontener (tło)
+        const overlay = document.createElement('div');
+        overlay.className = 'modal-overlay';
+        
+        // Generujemy pola formularza na podstawie przekazanej tablicy
+        const inputsHTML = fields.map(f => {
+            const isSelect = f.type === 'select';
+            return `
+                <div class="modal-field" style="margin-top: 15px; display: flex; flex-direction: column;">
+                    <label style="font-weight: bold; margin-bottom: 5px; font-size: 14px;">${f.label}</label>
+                    ${isSelect 
+                        ? `<select id="modal-${f.id}" style="padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 16px;">
+                            ${f.options?.map(o => `<option value="${o}" ${f.value === o ? 'selected' : ''}>${o}</option>`).join('')}
+                           </select>`
+                        : `<input type="${f.type}" id="modal-${f.id}" value="${f.value || ''}" style="padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 16px;">`
+                    }
+                </div>
+            `;
+        }).join('');
+
+        // Składamy całe okno w całość
+        overlay.innerHTML = `
+            <div class="modal-content">
+                <h3 style="margin-top: 0; border-bottom: 2px solid #007bff; padding-bottom: 10px;">${title}</h3>
+                <form id="modal-form">
+                    ${inputsHTML}
+                    <div class="modal-actions" style="margin-top: 25px; display: flex; justify-content: flex-end; gap: 10px;">
+                        <button type="button" class="btn-cancel" id="modal-cancel">Anuluj</button>
+                        <button type="submit" class="btn-save" id="modal-save">Zapisz</button>
+                    </div>
+                </form>
+            </div>
+        `;
+
+        // Bardzo ważne: dodajemy do document.body, aby ominąć błędy pozycjonowania w #app
+        document.body.appendChild(overlay);
+
+        const closeModal = () => {
+            document.body.removeChild(overlay);
+        };
+
+        const form = overlay.querySelector('#modal-form') as HTMLFormElement;
+
+        // Obsługa wysłania formularza (Zapisz)
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const results: Record<string, string> = {};
+            fields.forEach(f => {
+                const element = document.getElementById(`modal-${f.id}`) as HTMLInputElement | HTMLSelectElement;
+                results[f.id] = element.value;
+            });
+            closeModal();
+            resolve(results);
+        });
+
+        // Obsługa przycisku Anuluj
+        overlay.querySelector('#modal-cancel')!.addEventListener('click', () => {
+            closeModal();
+            resolve(null);
+        });
+
+        // Zamknięcie po kliknięciu w szare tło (overlay)
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) {
+                closeModal();
+                resolve(null);
+            }
+        });
+    });
+}
+
 async function loginUser() {
   const login = (document.querySelector<HTMLInputElement>('#login')!).value;
   const password = (document.querySelector<HTMLInputElement>('#password')!).value;
@@ -159,6 +232,34 @@ async function showMainPage() {
   }
 }
 
+// 1. Podmień w showMainPage (event listener dla #add-story)
+async function handleAddStory() {
+    const currentProject = await getCurrentProject();
+    const data = await showModal('Nowe Zgłoszenie', [
+        { id: 'title', label: 'Podsumowanie', type: 'text' },
+        { id: 'desc', label: 'Opis', type: 'text' },
+        { id: 'prio', label: 'Priorytet', type: 'select', options: ['Low', 'Medium', 'High'] }
+    ]);
+
+    if (data) {
+        const userJson = localStorage.getItem('loggedUser');
+        const loggedUser: User | null = userJson ? JSON.parse(userJson) : null;
+        const newStory = {
+            id: crypto.randomUUID(),
+            title: data.title,
+            description: data.desc,
+            priority: data.prio as Priority,
+            project: currentProject as string,
+            createdAt: new Date().toISOString(),
+            status: "ToDo" as Status,
+            ownerId: loggedUser?.id as string,
+            tasks: []
+        };
+        await StoryApi.addStory(newStory);
+        window.location.reload();
+    }
+}
+
 async function showProjectManagementPage() {
   const projects = await ProjectApi.getAll();
 
@@ -285,31 +386,26 @@ async function getCurrentProject(): Promise<string | null> {
   }
 }
 
+// 2. Podmień funkcję updateStory
 async function updateStory(oldStory: Story) {
-  const title = prompt('Tytuł story:')!;
-  const description = prompt('Opis story:')!;
-  const priority = prompt('Priorytet (Low, Medium, High):') as Priority;
-  const status = prompt('Status: ToDo, InProgress, Done')
-  const currentProject = await getCurrentProject();
+    const data = await showModal('Edytuj Story', [
+        { id: 'title', label: 'Tytuł', type: 'text', value: oldStory.title },
+        { id: 'desc', label: 'Opis', type: 'text', value: oldStory.description },
+        { id: 'prio', label: 'Priorytet', type: 'select', options: ['Low', 'Medium', 'High'], value: oldStory.priority },
+        { id: 'status', label: 'Status', type: 'select', options: ['ToDo', 'InProgress', 'InQA', 'Done'], value: oldStory.status }
+    ]);
 
-  const userJson = localStorage.getItem('loggedUser');
-  const loggedUser: User | null = userJson ? JSON.parse(userJson) : null;
-
-  const newStory = {
-    id: oldStory.id,
-    title: title,
-    description: description,
-    priority: priority as Priority,
-    project: currentProject as string,
-    createdAt: new Date().toISOString(),
-    status: status as Status, // Zależnie od definicji Status (np. "Todo", "InProgress", "Done")
-    ownerId: loggedUser?.id as string, // jakiś identyfikator użytkownika
-    tasks: oldStory.tasks as Task[]
-  };
-
-  StoryApi.updateStory(newStory);
-  showMainPage();
-  window.location.reload();
+    if (data) {
+        const updatedStory = {
+            ...oldStory,
+            title: data.title,
+            description: data.desc,
+            priority: data.prio as Priority,
+            status: data.status as Status,
+        };
+        await StoryApi.updateStory(updatedStory);
+        window.location.reload();
+    }
 }
 
 function initializeTheme() {
@@ -465,26 +561,27 @@ async function showStoryList(container: HTMLElement) {
 }
 
 async function createTask(storyId: string) {
-  const title = prompt('Tytuł zadania:');
-  const description = prompt('Opis zadania:');
-  const priority = prompt('Priorytet (Low, Medium, High):') as Priority;
-  const estimatedHours = Number(prompt('Przewidywane roboczogodziny:'));
+    const data = await showModal('Nowe Zadanie', [
+        { id: 'title', label: 'Tytuł zadania', type: 'text' },
+        { id: 'desc', label: 'Opis zadania', type: 'text' },
+        { id: 'prio', label: 'Priorytet', type: 'select', options: ['Low', 'Medium', 'High'] },
+        { id: 'hours', label: 'Przewidywane godziny', type: 'number' }
+    ]);
 
-  if (title && description && priority && !isNaN(estimatedHours)) {
-    const newTask: Task = {
-      id: crypto.randomUUID(),
-      title,
-      description,
-      priority,
-      estimatedHours,
-      hoursWorked: 0,
-      status: 'ToDo',
-      createdAt: new Date().toISOString(),
-    };
-    await StoryApi.addTask(storyId, newTask);
-    showMainPage();
-    window.location.reload();
-  }
+    if (data) {
+        const newTask: Task = {
+            id: crypto.randomUUID(),
+            title: data.title,
+            description: data.desc,
+            priority: data.prio as Priority,
+            estimatedHours: Number(data.hours),
+            hoursWorked: 0,
+            status: 'ToDo',
+            createdAt: new Date().toISOString(),
+        };
+        await StoryApi.addTask(storyId, newTask);
+        window.location.reload();
+    }
 }
 
 async function viewTaskDetails(storyId: string, taskId: string) {
@@ -523,86 +620,105 @@ async function viewTaskDetails(storyId: string, taskId: string) {
 }
 
 async function assignUser(storyId: string, taskId: string) {
-  console.log("Assign user start");
-  const task = await StoryApi.getTask(storyId, taskId);
-  console.log("task:", task);
+    try {
+        // 1. Pobieramy zadanie z API
+        const task = await StoryApi.getTask(storyId, taskId);
+        
+        const userJson = localStorage.getItem('loggedUser');
+        const loggedUser: User | null = userJson ? JSON.parse(userJson) : null;
 
-  const userJson = localStorage.getItem('loggedUser');
-  const loggedUser: User | null = userJson ? JSON.parse(userJson) : null;
+        if (!task || !loggedUser) {
+            alert("Błąd: Nie znaleziono zadania lub nie jesteś zalogowany.");
+            return;
+        }
 
-  if (!task || !loggedUser) {
-    console.log("!task || !loggedInUser");
-    return;
-  }
-  console.log("Assign user after return");
+        // 2. Weryfikacja roli
+        if (loggedUser.role === 'devops' || loggedUser.role === 'developer') {
+            // Modyfikujemy obiekt zadania
+            task.assignedUserId = loggedUser.id;
+            task.status = 'InProgress';
+            task.startAt = new Date().toISOString();
+            task.endAt = "";
 
-  if (loggedUser.role === 'devops' || loggedUser.role === 'developer') {
-    task.assignedUserId = loggedUser.id;
-    task.status = 'InProgress';
-    task.startAt = new Date().toISOString();
-    task.endAt = "";
-    task.assignedUserId = loggedUser.id;
-    await StoryApi.updateTask(storyId, task);
-    viewTaskDetails(storyId, taskId);
-  } else {
-    alert('Tylko Developer lub DevOps mogą przypisać się do zadania.');
-  }
+            // 3. Wysyłamy do serwera i CZEKAMY na odpowiedź
+            const response = await StoryApi.updateTask(storyId, task);
+            
+            if (response) {
+                console.log("Zadanie przypisane poprawnie");
+                // Odświeżamy szczegóły, by zobaczyć zmiany
+                viewTaskDetails(storyId, taskId);
+            }
+        } else {
+            alert('Tylko Developer lub DevOps mogą przypisać się do zadania.');
+        }
+    } catch (error) {
+        console.error("Szczegóły błędu:", error);
+        alert("Wystąpił błąd komunikacji z serwerem. Sprawdź konsolę (F12).");
+    }
 }
 
 async function markTaskDone(storyId: string, taskId: string) {
-  const task = await StoryApi.getTask(storyId, taskId);
+    try {
+        const task = await StoryApi.getTask(storyId, taskId);
+        if (!task) return;
 
-  const userJson = localStorage.getItem('loggedUser');
-  const loggedUser: User | null = userJson ? JSON.parse(userJson) : null;
-
-  if (!task || !loggedUser) return;
-
-  if (task.status === 'InProgress') {
-    task.status = 'Done';
-    task.endAt = new Date().toISOString();
-    await StoryApi.updateTask(storyId, task);
-    viewTaskDetails(storyId, taskId);
-  } else {
-    alert('Zadanie musi być w stanie "InProgress", aby zmienić na "Done".');
-  }
+        if (task.status === 'InProgress') {
+            task.status = 'Done';
+            task.endAt = new Date().toISOString();
+            
+            await StoryApi.updateTask(storyId, task);
+            viewTaskDetails(storyId, taskId);
+        } else {
+            alert('Zadanie musi być w stanie "InProgress", aby zmienić na "Done".');
+        }
+    } catch (error) {
+        console.error("Błąd podczas kończenia zadania:", error);
+    }
 }
 
-function deleteTask(storyId: string, taskId: string) {
-  StoryApi.deleteTask(storyId, taskId);
-  showMainPage();
-  window.location.reload();
+async function deleteTask(storyId: string, taskId: string) {
+  if (confirm('Czy na pewno chcesz usunąć to zadanie?')) {
+    try {
+      // Dodajemy 'await', aby poczekać na odpowiedź z API
+      await StoryApi.deleteTask(storyId, taskId);
+      
+      console.log("Zadanie usunięte pomyślnie");
+      
+      // Dopiero po sukcesie odświeżamy widok
+      showMainPage();
+      window.location.reload();
+    } catch (error) {
+      console.error("Błąd podczas usuwania zadania:", error);
+      alert("Nie udało się usunąć zadania. Spróbuj ponownie.");
+    }
+  }
 }
 
 async function updateTask(button: HTMLButtonElement) {
+    const storyId = button.dataset.storyId!;
+    const taskId = button.dataset.taskId!;
+    const oldTask = await StoryApi.getTask(storyId, taskId);
 
-  const storyId = (button as HTMLElement).dataset.storyId!;
-  const taskId = (button as HTMLElement).dataset.taskId!;
-  const oldTask = await StoryApi.getTask(storyId, taskId);
+    const data = await showModal('Edytuj Zadanie', [
+        { id: 'title', label: 'Tytuł', type: 'text', value: oldTask.title },
+        { id: 'desc', label: 'Opis', type: 'text', value: oldTask.description },
+        { id: 'prio', label: 'Priorytet', type: 'select', options: ['Low', 'Medium', 'High'], value: oldTask.priority },
+        { id: 'est', label: 'Planowane h', type: 'number', value: oldTask.estimatedHours.toString() },
+        { id: 'work', label: 'Przepracowane h', type: 'number', value: oldTask.hoursWorked.toString() }
+    ]);
 
-  const title = prompt('Tytuł zadania:');
-  const description = prompt('Opis zadania:');
-  const priority = prompt('Priorytet (Low, Medium, High):') as Priority;
-  const estimatedHours = Number(prompt('Przewidywane roboczogodziny:'));
-  const hoursWorked = Number(prompt("Przepracowane roboczogodziny:"))
-
-  if (title && description && priority && !isNaN(estimatedHours)) {
-    console.log("Wchodzimy w ifa updatujemy task");
-    const newTask: Task = {
-      id: oldTask.id,
-      title,
-      description,
-      priority,
-      estimatedHours,
-      hoursWorked,
-      status: oldTask.status,
-      createdAt: oldTask.createdAt
-    };
-    StoryApi.updateTask(storyId, newTask)
-    console.log("Show main page");
-    showMainPage();
-    window.location.reload();
-  }
-
+    if (data) {
+        const newTask: Task = {
+            ...oldTask,
+            title: data.title,
+            description: data.desc,
+            priority: data.prio as Priority,
+            estimatedHours: Number(data.est),
+            hoursWorked: Number(data.work)
+        };
+        await StoryApi.updateTask(storyId, newTask);
+        window.location.reload();
+    }
 }
 
 async function showKanban() {
