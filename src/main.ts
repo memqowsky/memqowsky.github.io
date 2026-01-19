@@ -97,7 +97,7 @@ async function loginUser() {
 
 async function showLoginPage() {
   app.innerHTML = `
-        <h1>ManagMe - Logowanie</h1>
+        <h1>Aplikacja webowa wspomagająca testowanie gier</h1>
         <form id="login-form">
             <input type="text" id="login" placeholder="Login" required />
             <input type="password" id="password" placeholder="Hasło" required />
@@ -156,7 +156,7 @@ async function showMainPage() {
 
   app.innerHTML = `
     <h1>Tablica: ${currentProjectName}</h1>
-    <button id="view-kanban">Zobacz Kanban</button>
+    <button id="view-kanban">Panel monitorowania</button>
     <button id="add-story">Dodaj zgłoszenie</button>
     ${
       loggedUser?.role === 'admin'
@@ -197,39 +197,38 @@ async function showMainPage() {
     logoutFunction();
   });
 
-  const currentProject = await getCurrentProject();
-
   document.querySelector<HTMLButtonElement>('#add-story')!.addEventListener('click', async () => {
-    const title = prompt('Podsumowanie:')!;
-    const description = prompt('Opis:')!;
-    const priority = prompt('Priorytet (Low, Medium, High):') as Priority;
-    const status = "ToDo"
-
-    const userJson = localStorage.getItem('loggedUser');
-    const loggedUser: User | null = userJson ? JSON.parse(userJson) : null;
-
-    const newStory = {
-      id: crypto.randomUUID(),
-      title: title,
-      description: description,
-      priority: priority as Priority,
-      project: currentProject as string,
-      createdAt: new Date().toISOString(),
-      status: status as Status,
-      ownerId: loggedUser?.id as string,
-      tasks: []
-    };
-
-
-    await StoryApi.addStory(newStory);
-    showMainPage();
-    window.location.reload();
+    await handleAddStory();
   });
   if (loggedUser?.role === 'admin') {
     document.querySelector<HTMLButtonElement>('#manage-projects')!.addEventListener('click', () => {
       showProjectManagementPage();
     });
   }
+}
+
+async function handleAddProject() {
+    const data = await showModal('Nowy Projekt', [
+        { id: 'name', label: 'Nazwa projektu', type: 'text' },
+        { id: 'code', label: 'Skrót projektu', type: 'text' }
+    ]);
+
+    if (data) {
+        await ProjectApi.add({ name: data.name, code: data.code });
+        window.location.reload();
+    }
+}
+
+async function handleEditProject(projectId: string, oldName: string, oldCode: string) {
+    const data = await showModal('Edytuj Projekt', [
+        { id: 'name', label: 'Nazwa projektu', type: 'text', value: oldName },
+        { id: 'code', label: 'Skrót projektu', type: 'text', value: oldCode }
+    ]);
+
+    if (data) {
+        await ProjectApi.update({ id: projectId, name: data.name, code: data.code });
+        window.location.reload();
+    }
 }
 
 // 1. Podmień w showMainPage (event listener dla #add-story)
@@ -323,12 +322,7 @@ async function showProjectManagementPage() {
 
   // Obsługa zdarzeń
   document.querySelector<HTMLButtonElement>('#add-project')!.addEventListener('click', async () => {
-    const name = prompt('Nazwa projektu:');
-    const code = prompt('Skrót projektu:');
-    if (name && code) {
-      await ProjectApi.add({ name, code });
-      window.location.reload();
-    }
+    await handleAddProject();
   });
 
   const projectsTableBody = document.querySelector('#projects-table-body')!;
@@ -339,12 +333,7 @@ async function showProjectManagementPage() {
       const id = target.dataset.id!;
       const oldName = target.dataset.name!;
       const oldCode = target.dataset.code!;
-      const newName = prompt('Nowa nazwa:', oldName);
-      const newCode = prompt('Nowy skrót:', oldCode);
-      if (newName && newCode) {
-        await ProjectApi.update({ id, name: newName, code: newCode });
-        window.location.reload();
-      }
+      await handleEditProject(id, oldName, oldCode);
     } else if (target.classList.contains('delete-project')) {
       const id = target.dataset.id!;
       if (confirm('Czy na pewno chcesz usunąć ten projekt?')) {
@@ -677,20 +666,18 @@ async function markTaskDone(storyId: string, taskId: string) {
 }
 
 async function deleteTask(storyId: string, taskId: string) {
-  if (confirm('Czy na pewno chcesz usunąć to zadanie?')) {
-    try {
-      // Dodajemy 'await', aby poczekać na odpowiedź z API
-      await StoryApi.deleteTask(storyId, taskId);
-      
-      console.log("Zadanie usunięte pomyślnie");
-      
-      // Dopiero po sukcesie odświeżamy widok
-      showMainPage();
-      window.location.reload();
-    } catch (error) {
-      console.error("Błąd podczas usuwania zadania:", error);
-      alert("Nie udało się usunąć zadania. Spróbuj ponownie.");
-    }
+  try {
+    // Dodajemy 'await', aby poczekać na odpowiedź z API
+    await StoryApi.deleteTask(storyId, taskId);
+    
+    console.log("Zadanie usunięte pomyślnie");
+    
+    // Dopiero po sukcesie odświeżamy widok
+    showMainPage();
+    window.location.reload();
+  } catch (error) {
+    console.error("Błąd podczas usuwania zadania:", error);
+    alert("Nie udało się usunąć zadania. Spróbuj ponownie.");
   }
 }
 
@@ -732,7 +719,7 @@ async function showKanban() {
   }
 
   app.innerHTML = `
-    <h1 style="margin-bottom:12px;">Kanban Board</h1>
+    <h1 style="margin-bottom:12px;">Mapa zadań</h1>
 
     <div id="kanban-container" style="
       display:flex;
@@ -890,12 +877,7 @@ async function showProjectSelect() {
     });
 
     addProjectButton.addEventListener('click', async () => {
-      const name = prompt('Nazwa projektu:');
-      const code = prompt('Skrót projektu:');
-      if (name && code) {
-        await ProjectApi.add({ name, code });
-        window.location.reload();
-      }
+      await handleAddProject();
     });
 
     console.log("Jesteśmy w ifie, currentProject: ", currentProject);
