@@ -5,30 +5,15 @@ const bodyParser = require('body-parser');
 const app = express();
 const port = 3000;
 
-// --- ZMIANA: KONFIGURACJA CORS ---
 const cors = require('cors');
 
-// Użycie cors() bez argumentów: zezwala na wszystkie źródła (origin: '*')
-// W ten sposób serwer przyjmie żądania z Twojego front-endu na Netlify, Renderze, localhost, itd.
 app.use(cors());
-
-// Możesz również użyć bardziej restrykcyjnej konfiguracji, jeśli chcesz:
-/*
-app.use(cors({
-    origin: '*', // Zezwolenie na DOWOLNE źródło
-    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Dopuszczalne metody
-    credentials: true // Jeśli używasz ciasteczek/sesji
-}));
-*/
 
 require('dotenv').config();
 
 let currentProject = 'undefined';
 
 app.use(bodyParser.json());
-// Pamiętaj, że w większości aplikacji wdrożonych na Render/Heroku nie serwujesz front-endu
-// Zazwyczaj to ustawienie jest potrzebne, jeśli serwerujesz statyczne pliki z tego samego serwera:
-// app.use(express.static(path.join(__dirname, 'public'))); 
 
 const userRoutes = require('./routes/userRoutes');
 app.use('/api/users', userRoutes);
@@ -69,8 +54,6 @@ mongoose.connect(process.env.MONGO_URI, {
     console.error('❌ Błąd połączenia z MongoDB:', error);
 });
 
-// Pamiętaj, aby na platformach takich jak Render używać zmiennej środowiskowej
-// PORT, zamiast ustalonej wartości 3000.
 const serverPort = process.env.PORT || port; 
 
 app.listen(serverPort, () => {

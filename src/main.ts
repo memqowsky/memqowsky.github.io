@@ -1,7 +1,7 @@
 import './style.css';
 import { Task, Story, StoryApi, Priority, Status } from './StoryApi';
 import { User, UserApi } from './UserApi';
-import { Project, ProjectApi } from './ProjectApi'; // Dodaj ten import
+import { Project, ProjectApi } from './ProjectApi';
 
 const app = document.querySelector<HTMLDivElement>('#app')!;
 
@@ -11,11 +11,9 @@ type TaskWithStory = Task & { storyTitle: string };
 
 async function showModal(title: string, fields: {id: string, label: string, type: string, options?: string[], value?: string}[]): Promise<Record<string, string> | null> {
     return new Promise((resolve) => {
-        // Tworzymy główny kontener (tło)
         const overlay = document.createElement('div');
         overlay.className = 'modal-overlay';
         
-        // Generujemy pola formularza na podstawie przekazanej tablicy
         const inputsHTML = fields.map(f => {
             const isSelect = f.type === 'select';
             return `
@@ -31,7 +29,6 @@ async function showModal(title: string, fields: {id: string, label: string, type
             `;
         }).join('');
 
-        // Składamy całe okno w całość
         overlay.innerHTML = `
             <div class="modal-content">
                 <h3 style="margin-top: 0; border-bottom: 2px solid #007bff; padding-bottom: 10px;">${title}</h3>
@@ -45,7 +42,6 @@ async function showModal(title: string, fields: {id: string, label: string, type
             </div>
         `;
 
-        // Bardzo ważne: dodajemy do document.body, aby ominąć błędy pozycjonowania w #app
         document.body.appendChild(overlay);
 
         const closeModal = () => {
@@ -54,7 +50,6 @@ async function showModal(title: string, fields: {id: string, label: string, type
 
         const form = overlay.querySelector('#modal-form') as HTMLFormElement;
 
-        // Obsługa wysłania formularza (Zapisz)
         form.addEventListener('submit', (e) => {
             e.preventDefault();
             const results: Record<string, string> = {};
@@ -66,13 +61,11 @@ async function showModal(title: string, fields: {id: string, label: string, type
             resolve(results);
         });
 
-        // Obsługa przycisku Anuluj
         overlay.querySelector('#modal-cancel')!.addEventListener('click', () => {
             closeModal();
             resolve(null);
         });
 
-        // Zamknięcie po kliknięciu w szare tło (overlay)
         overlay.addEventListener('click', (e) => {
             if (e.target === overlay) {
                 closeModal();
@@ -97,7 +90,7 @@ async function loginUser() {
 
 async function showLoginPage() {
   app.innerHTML = `
-        <h1>Aplikacja webowa wspomagająca testowanie gier</h1>
+        <h1>Ekran logowania</h1>
         <form id="login-form">
             <input type="text" id="login" placeholder="Login" required />
             <input type="password" id="password" placeholder="Hasło" required />
@@ -231,7 +224,6 @@ async function handleEditProject(projectId: string, oldName: string, oldCode: st
     }
 }
 
-// 1. Podmień w showMainPage (event listener dla #add-story)
 async function handleAddStory() {
     const currentProject = await getCurrentProject();
     const data = await showModal('Nowe Zgłoszenie', [
@@ -375,7 +367,6 @@ async function getCurrentProject(): Promise<string | null> {
   }
 }
 
-// 2. Podmień funkcję updateStory
 async function updateStory(oldStory: Story) {
     const data = await showModal('Edytuj Story', [
         { id: 'title', label: 'Tytuł', type: 'text', value: oldStory.title },
@@ -453,7 +444,6 @@ async function showStoryList(container: HTMLElement) {
       }
     }
 
-    // 🧩 DODANY guzik "Następny etap"
     const nextStageButton = `
       <button class="next-stage-button" data-story-id="${story.id}">
         ➡️ Następny etap
@@ -526,7 +516,6 @@ async function showStoryList(container: HTMLElement) {
       }
     }
 
-    // 🧩 Obsługa "Następny etap"
     if (target.classList.contains("next-stage-button")) {
       const storyId = target.dataset.storyId!;
       const story = await StoryApi.getStory(storyId);
@@ -610,7 +599,6 @@ async function viewTaskDetails(storyId: string, taskId: string) {
 
 async function assignUser(storyId: string, taskId: string) {
     try {
-        // 1. Pobieramy zadanie z API
         const task = await StoryApi.getTask(storyId, taskId);
         
         const userJson = localStorage.getItem('loggedUser');
@@ -621,20 +609,16 @@ async function assignUser(storyId: string, taskId: string) {
             return;
         }
 
-        // 2. Weryfikacja roli
         if (loggedUser.role === 'devops' || loggedUser.role === 'developer') {
-            // Modyfikujemy obiekt zadania
             task.assignedUserId = loggedUser.id;
             task.status = 'InProgress';
             task.startAt = new Date().toISOString();
             task.endAt = undefined;
 
-            // 3. Wysyłamy do serwera i CZEKAMY na odpowiedź
             const response = await StoryApi.updateTask(storyId, task);
             
             if (response) {
                 console.log("Zadanie przypisane poprawnie");
-                // Odświeżamy szczegóły, by zobaczyć zmiany
                 viewTaskDetails(storyId, taskId);
             }
         } else {
@@ -667,12 +651,10 @@ async function markTaskDone(storyId: string, taskId: string) {
 
 async function deleteTask(storyId: string, taskId: string) {
   try {
-    // Dodajemy 'await', aby poczekać na odpowiedź z API
     await StoryApi.deleteTask(storyId, taskId);
     
     console.log("Zadanie usunięte pomyślnie");
     
-    // Dopiero po sukcesie odświeżamy widok
     showMainPage();
     window.location.reload();
   } catch (error) {
@@ -740,11 +722,6 @@ async function showKanban() {
       </div>
 
       <div class="kanban-column">
-        <h3>W testach 🧪</h3>
-        <div id="kanban-inqa"></div>
-      </div>
-
-      <div class="kanban-column">
         <h3>Ukończone ✅</h3>
         <div id="kanban-done"></div>
       </div>
@@ -781,7 +758,6 @@ async function showKanban() {
     </style>
   `;
 
-  // Wypełnienie zadań
 const renderTaskCard = (t: TaskWithStory) => {
   return `
     <div class="kanban-card">
@@ -794,12 +770,10 @@ const renderTaskCard = (t: TaskWithStory) => {
 
   const todoEl = document.querySelector<HTMLDivElement>('#kanban-todo')!;
   const inprEl = document.querySelector<HTMLDivElement>('#kanban-inprogress')!;
-  const inqaEl = document.querySelector<HTMLDivElement>('#kanban-inqa')!;
   const doneEl = document.querySelector<HTMLDivElement>('#kanban-done')!;
 
   todoEl.innerHTML = allTasks.filter(t => t.status === 'ToDo').map(renderTaskCard).join('');
   inprEl.innerHTML = allTasks.filter(t => t.status === 'InProgress').map(renderTaskCard).join('');
-  inqaEl.innerHTML = allTasks.filter(t => t.status === 'InQA').map(renderTaskCard).join('');
   doneEl.innerHTML = allTasks.filter(t => t.status === 'Done').map(renderTaskCard).join('');
 
   document.querySelector<HTMLButtonElement>('#kanban-back')!.addEventListener('click', () => showMainPage());
@@ -887,7 +861,6 @@ async function showProjectSelect() {
   }
 }
 
-// Zmodyfikowana funkcja toggleTheme
 const toggleTheme = () => {
   const light = document.getElementById("light-theme") as HTMLLinkElement;
   const dark = document.getElementById("dark-theme") as HTMLLinkElement;
@@ -927,7 +900,6 @@ const goToHomePage = () => {
 (window as any).goToHomePage = goToHomePage;
 (window as any).showProjectManagementPage = showProjectManagementPage;
 
-// Inicjalizuj motyw przy starcie aplikacji
 initializeTheme();
 
 showProjectSelect();

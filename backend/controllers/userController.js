@@ -1,5 +1,5 @@
 const userService = require('../services/userService');
-const User = require('../models/userModel'); // upewnij się, że to masz na górze
+const User = require('../models/userModel');
 
 
 exports.login = async (req, res) => {
